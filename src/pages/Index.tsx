@@ -7,6 +7,8 @@ import VerseCard, { VerseData } from "@/components/VerseCard";
 import { findRelevantVerse } from "@/utils/bibleVerseService";
 import { saveFavorite, isFavorite } from "@/utils/localStorageUtils";
 
+const WINDMILL_WEBHOOK_URL = "https://app.windmill.dev/api/w/bibleverse/jobs/run/f/u/arun/qURjn5F0fK2L";
+
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [verse, setVerse] = useState<VerseData | null>(null);
@@ -15,7 +17,22 @@ const Index = () => {
   const handleChallengeSubmit = async (challenge: string) => {
     setIsLoading(true);
     setIsUsingAI(true);
+    
     try {
+      // Call the webhook
+      await fetch(WINDMILL_WEBHOOK_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          challenge: challenge,
+          timestamp: new Date().toISOString() 
+        }),
+        mode: "no-cors" // Add this to handle CORS
+      });
+      
+      // Get verse recommendation
       const recommendedVerse = await findRelevantVerse(challenge);
       setVerse(recommendedVerse);
     } catch (error) {
