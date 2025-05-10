@@ -1,25 +1,33 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+
+import { Link } from "react-router-dom";
+import Navbar from "@/components/Navbar";
 
 const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
-  }, [location.pathname]);
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
-      </div>
+    <div className="min-h-screen bg-wisdom-bg flex flex-col">
+      <Navbar />
+      
+      <main className="flex-grow flex items-center justify-center">
+        <div className="text-center px-4">
+          <h1 className="text-6xl font-serif font-bold text-wisdom-primary mb-6">404</h1>
+          <h2 className="text-2xl font-medium text-wisdom-text mb-4">Page Not Found</h2>
+          <p className="text-wisdom-muted mb-8 max-w-md mx-auto">
+            "The Lord will guide you always; he will satisfy your needs in a sun-scorched land and will strengthen your frame." - Isaiah 58:11
+          </p>
+          <Link 
+            to="/" 
+            className="inline-block px-6 py-3 bg-wisdom-primary text-white rounded-lg hover:bg-wisdom-accent transition-colors"
+          >
+            Return to Home
+          </Link>
+        </div>
+      </main>
+      
+      <footer className="bg-white py-6 border-t border-wisdom-light">
+        <div className="container mx-auto px-4 text-center text-wisdom-muted">
+          <p>Bible Wisdom &copy; {new Date().getFullYear()}</p>
+        </div>
+      </footer>
     </div>
   );
 };
