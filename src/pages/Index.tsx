@@ -10,14 +10,16 @@ import { saveFavorite, isFavorite } from "@/utils/localStorageUtils";
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [verse, setVerse] = useState<VerseData | null>(null);
+  const [isUsingAI, setIsUsingAI] = useState(false);
 
   const handleChallengeSubmit = async (challenge: string) => {
     setIsLoading(true);
+    setIsUsingAI(true);
     try {
       const recommendedVerse = await findRelevantVerse(challenge);
       setVerse(recommendedVerse);
     } catch (error) {
-      toast("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
       console.error("Error finding verse:", error);
     } finally {
       setIsLoading(false);
@@ -41,6 +43,9 @@ const Index = () => {
             <p className="text-wisdom-text">
               Share your challenge, and receive a Bible verse to guide you.
             </p>
+            <p className="text-sm text-wisdom-muted mt-1">
+              Powered by Claude AI for personalized guidance
+            </p>
           </div>
           
           <ChallengeInput onSubmit={handleChallengeSubmit} isLoading={isLoading} />
@@ -50,6 +55,7 @@ const Index = () => {
               verse={verse} 
               onSave={handleSaveVerse}
               isSaved={verse ? isFavorite(verse) : false}
+              isAIGenerated={isUsingAI}
             />
           )}
         </div>

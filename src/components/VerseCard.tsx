@@ -13,9 +13,10 @@ interface VerseCardProps {
   verse: VerseData;
   onSave: (verse: VerseData) => void;
   isSaved?: boolean;
+  isAIGenerated?: boolean;
 }
 
-const VerseCard = ({ verse, onSave, isSaved = false }: VerseCardProps) => {
+const VerseCard = ({ verse, onSave, isSaved = false, isAIGenerated = false }: VerseCardProps) => {
   const [saved, setSaved] = useState(isSaved);
 
   const handleSave = () => {
@@ -54,6 +55,12 @@ const VerseCard = ({ verse, onSave, isSaved = false }: VerseCardProps) => {
           <div className="inline-block bg-wisdom-primary/10 px-3 py-1 rounded-full text-sm font-medium text-wisdom-primary mb-4">
             {verse.reference}
           </div>
+          
+          {isAIGenerated && (
+            <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">
+              AI Assisted
+            </span>
+          )}
         </div>
         
         <blockquote className="font-serif text-xl md:text-2xl leading-relaxed mb-6 text-wisdom-text italic">

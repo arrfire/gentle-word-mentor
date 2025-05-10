@@ -1,7 +1,7 @@
 
 import { VerseData } from "@/components/VerseCard";
 
-// Mock Bible verse data
+// Mock Bible verse data - will serve as fallbacks
 const verses = [
   {
     challenge: "forgiveness",
@@ -69,29 +69,74 @@ const verses = [
   }
 ];
 
-// Function to find relevant verse based on user challenge
+// Helper function to find a fallback verse from our local collection
+const findFallbackVerse = (challenge: string): VerseData => {
+  // Convert challenge to lowercase for case-insensitive matching
+  const lowercaseChallenge = challenge.toLowerCase();
+  
+  // Look for matching keywords
+  for (const entry of verses) {
+    if (lowercaseChallenge.includes(entry.challenge)) {
+      return entry.verse;
+    }
+  }
+  
+  // Default verse if no match found
+  return {
+    text: "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.",
+    reference: "Jeremiah 29:11",
+    explanation: "Whatever you're facing, remember that God has good plans for your life. Even when circumstances are difficult, this verse reminds us that He is working toward a hopeful future for us."
+  };
+};
+
+// Function to find relevant verse based on user challenge using Claude AI
 export const findRelevantVerse = async (challenge: string): Promise<VerseData> => {
-  // In a real app, this would be an API call to an AI service
-  // For now, we'll simulate a delay and do basic keyword matching
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      // Convert challenge to lowercase for case-insensitive matching
-      const lowercaseChallenge = challenge.toLowerCase();
+  try {
+    // Claude AI API endpoint 
+    // Note: This is currently a mock implementation
+    const response = await fetch('https://api.claudeai.example/bible-wisdom', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // In a real implementation, you would use environment variables for API keys
+        // 'Authorization': `Bearer ${process.env.CLAUDE_API_KEY}`
+      },
+      body: JSON.stringify({
+        prompt: `
+          Based on this person's challenge: "${challenge}", 
+          provide a relevant Bible verse that offers guidance, comfort, or wisdom.
+          Return JSON with three fields: 
+          1. The verse text 
+          2. The verse reference (book chapter:verse)
+          3. A brief, compassionate explanation (2-3 sentences) of how this verse might apply to their situation
+        `,
+        // Additional Claude parameters would go here
+        max_tokens: 500,
+        temperature: 0.7
+      })
+    });
+
+    // This is where we would parse Claude's response
+    // If we get a valid response, process it
+    if (response.ok) {
+      const data = await response.json();
       
-      // Look for matching keywords
-      for (const entry of verses) {
-        if (lowercaseChallenge.includes(entry.challenge)) {
-          resolve(entry.verse);
-          return;
-        }
-      }
-      
-      // Default verse if no match found
-      resolve({
-        text: "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.",
-        reference: "Jeremiah 29:11",
-        explanation: "Whatever you're facing, remember that God has good plans for your life. Even when circumstances are difficult, this verse reminds us that He is working toward a hopeful future for us."
+      // In a real implementation, we would parse and validate Claude's response
+      // For now, we'll simulate a brief delay and return our fallback response
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          console.log("Claude AI would process:", challenge);
+          resolve(findFallbackVerse(challenge));
+        }, 1500);
       });
-    }, 1500); // Simulate API delay
-  });
+    } else {
+      console.error("Error calling Claude AI:", response.statusText);
+      // Fall back to our local verse matching system
+      return findFallbackVerse(challenge);
+    }
+  } catch (error) {
+    console.error("Failed to connect to Claude AI:", error);
+    // Fall back to our local verse matching system
+    return findFallbackVerse(challenge);
+  }
 };
