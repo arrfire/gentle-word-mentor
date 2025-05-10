@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useToast } from "sonner";
+import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import VerseCard, { VerseData } from "@/components/VerseCard";
 import { getFavorites, saveFavorite } from "@/utils/localStorageUtils";
@@ -8,7 +8,6 @@ import { BookmarkX } from "lucide-react";
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState<VerseData[]>([]);
-  const toast = useToast;
 
   useEffect(() => {
     const savedFavorites = getFavorites();

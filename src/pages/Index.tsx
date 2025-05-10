@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useToast } from "sonner";
+import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import ChallengeInput from "@/components/ChallengeInput";
 import VerseCard, { VerseData } from "@/components/VerseCard";
@@ -10,7 +10,6 @@ import { saveFavorite, isFavorite } from "@/utils/localStorageUtils";
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [verse, setVerse] = useState<VerseData | null>(null);
-  const toast = useToast;
 
   const handleChallengeSubmit = async (challenge: string) => {
     setIsLoading(true);

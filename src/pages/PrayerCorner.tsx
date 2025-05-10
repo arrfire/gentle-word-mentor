@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useToast } from "sonner";
+import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import { PrayerEntry, getPrayers, savePrayer, deletePrayer } from "@/utils/localStorageUtils";
 import { MessageCircle, X, Calendar, Save } from "lucide-react";
@@ -8,7 +8,6 @@ import { MessageCircle, X, Calendar, Save } from "lucide-react";
 const PrayerCorner = () => {
   const [prayers, setPrayers] = useState<PrayerEntry[]>([]);
   const [newPrayer, setNewPrayer] = useState("");
-  const toast = useToast;
 
   useEffect(() => {
     const savedPrayers = getPrayers();
